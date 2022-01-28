@@ -120,3 +120,4 @@ Pour rappel, utiliser la commande suivante pour lancer les tests :
 ```cmd
 npm test
 ```
+Salomé Lepers
