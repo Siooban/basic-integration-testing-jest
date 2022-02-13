@@ -96,7 +96,7 @@ describe("DELETE/todos",()=>{
     const response =await request(app.callback()).delete(baseUrl).send(todo1)
     })
 });
-asyn function inserttodo(todo){}
+asyn function inserttodo(todo){
 const db =getDB()
 await db.collection("todos").insertOne(todo)
 }
