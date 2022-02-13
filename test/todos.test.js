@@ -91,7 +91,7 @@ describe("POST/todos",() =>{
         expect(response.body.errorMsg).toBe("Invalidparameter 'title'")
     });
    
-describe("DELETE/todos,()=>{
+describe("DELETE/todos",()=>{
          test("should respond with a 200 status code", async () =>{
     const response =await request(app.callback()).delete(baseUrl).send(todo1)
     })
