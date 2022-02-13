@@ -42,34 +42,61 @@ describe("GET /todos", () => {
     })
 
     test("should respond with list of existing todos", async () => {
-       const todosData= [{
-           id:"61e931687474c53eca3a716c",
+       
+           const todo1={
            tilte: "Todo 1",
            completed: false,
            createdAt: "2022-01-20T09:54:48.139Z",
            updatedAt: "2022-01-20T09:54:48.139Z"
-       },
-       { 
-           id: '61e931687474c53eca3a716d',
+       };
+        const todo2={
            tilte: "Todo 2",
            completed: true,
            createdAt: "2022-01-20T09:54:48.139Z",
            updatedAt: "2022-01-20T10:32:50.952Z"
-       }];
+       };
+        await inserttodo(todo1)
+        await inserttodo(todo2)
         const response = await request(app.callback()).get(baseUrl)
         
-        expect(response.body.length).toBe(2)
-        expect(response.body[0].id).toBe('61e931687474c53eca3a716c')
-        expect(response.body[1].id).toBe('61e931687474c53eca3a716d')
-        expect(response.body[0].title).toBe("Todo 1")
-        expect(response.body[1].title).toBe("Todo 2")
-        expect(response.body[0].completed).toBe(false)
-        expect(response.body[1].completed).toBe(true)
-        expect(response.body[0].createdAt).toBe( "2022-01-20T09:54:48.139Z")
-        expect(response.body[1].createdAt).toBe("2022-01-20T09:54:48.139Z")
-        expect(response.body[0].updatedAt).toBe("2022-01-20T09:54:48.139Z")
-        expect(response.body[1].updatedAt).toBe("2022-01-20T10:32:50.952Z")
+       expect( response.type).toBe("application/json")
+        expect(response.body).toMatchObject([todo1,todo2])
         
            
     })
 });
+
+describe("POST/todos",() =>{
+    const Data={title: "Todo 1"};
+    const missingData={};
+    const invalidData={title:null};
+    
+    test("should respond with a 200 status code", async () => {
+        const response = await request(app.callback()).post(baseUrl).send(Data)
+        expect(response.statusCode).toBe(200)
+        expect(response.body.id.length).toBe(24)
+        
+        
+    })
+    
+    test("should respond with a 422 status code (no todo title)", async () => {
+        const response= await request(app.callback()).post(baseUrl).send(missingData)
+        expect(response.statusCode).toBe(422)
+        expect(response.body.errorMsg).toBe("Missing parameter 'title'")
+    })
+    
+    test("should respond with a 400 status code if 'title' param is invalid", async () => {
+        const response = await request(app.callback()).post(baseUrl).send(invalidData)
+        expect(response.statusCode).toBe(400)
+        expect(response.body.errorMsg).toBe("Invalidparameter 'title'")
+    });
+   
+describe("DELETE/todos,()=>{
+         test("should respond with a 200 status code", async () =>{
+    const response =await request(app.callback()).delete(baseUrl).send(todo1)
+    })
+})
+asyn function inserttodo(todo){}
+const db =getDB()
+await db.collection("todos").insertOne(todo)
+}
